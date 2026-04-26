@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - FastPharma API</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo">FastPharma</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="upload.html" class="nav-item">Upload</a>
+            <a href="cart.html" class="nav-item">Cart</a>
+            <a href="profile.html" class="nav-item">Profile</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 700px; margin-top: 40px;">
+        <h2 style="color: white; margin-bottom: 5px;">Patient Order History</h2>
+        <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px;">Your lifetime encrypted transaction log.</p>
+        
+        <div id="ordersList" style="display: flex; flex-direction: column; gap: 10px;">
+            </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" style="text-decoration: none;">
+                <button class="action-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); max-width: 300px;">
+                    <i class="fas fa-arrow-left"></i> Return to Terminal
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function renderOrdersPage() {
+            let container = document.getElementById("ordersList");
+            if (!container) return;
+            
+            container.innerHTML = "";
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-history" style="font-size: 40px; color: rgba(255,255,255,0.2); margin-bottom: 15px;"></i>
+                        <div style="color: #cbd5e1;">No past orders found in your secure vault.</div>
+                    </div>`;
+                return;
+            }
+
+            let reversedOrders = [...orders].reverse();
+
+            reversedOrders.forEach((order, i) => {
+                let itemsList = order.items.map(item => item.name).join("<br>• ");
+                let subtotalForOrder = order.items.reduce((sum, item) => sum + item.price, 0);
+                
+                let gstForOrder = subtotalForOrder * 0.05;
+                let finalTotal = subtotalForOrder + gstForOrder;
+                
+                let totalDisplay = subtotalForOrder > 0 
+                    ? `<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between;">
+                        <span style="color: #94a3b8; font-size: 12px;">Inc. 5% GST</span>
+                        <span style="color: #38bdf8; font-weight: bold;">Paid: ₹${finalTotal.toFixed(2)}</span>
+                       </div>` 
+                    : `<p style="margin: 10px 0 0 0; color: #10b981; font-weight: bold;"><i class="fas fa-check-circle"></i> Document Transmitted</p>`;
+
+                container.innerHTML += `<div class="card" style="display: block; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 10px;">
+                        <h3 style="color: white; margin: 0;">Invoice #${1000 + orders.length - i}</h3>
+                        <span style="color: #94a3b8; font-size: 12px;"><i class="far fa-calendar-alt"></i> ${order.date}</span>
+                    </div>
+                    <p style="color: #cbd5e1; margin: 0; line-height: 1.6; font-size: 14px;">• ${itemsList}</p>
+                    ${totalDisplay}
+                </div>`;
+            });
+        }
+        
+        window.onload = () => {
+            renderOrdersPage();
+        }
+    </script>
+</body>
+</html>

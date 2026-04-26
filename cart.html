@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - FastPharma API</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        /* Specific styling for the total amount */
+        .cart-total-card {
+            background: rgba(14, 165, 233, 0.15); /* Slight blue tint for emphasis */
+            border: 1px solid var(--primary);
+            text-align: right;
+            font-size: 20px;
+        }
+        .empty-cart-msg {
+            text-align: center;
+            color: #cbd5e1;
+            padding: 40px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo">FastPharma</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="upload.html" class="nav-item">Upload</a>
+            <a href="cart.html" class="nav-item active">Cart</a>
+            <a href="profile.html" class="nav-item">Profile</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 700px; margin-top: 40px;">
+        <h2 style="color: white; margin-bottom: 5px;">Active Checkout</h2>
+        <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px;">Review your items before securing the delivery.</p>
+        
+        <div id="cartList" style="margin-bottom: 30px;"></div>
+        
+        <button class="magic-btn" onclick="placeOrder()" style="background: #10b981; max-width: 100%; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+            <i class="fas fa-lock"></i> Secure Order to Cloud
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function renderCartPage() {
+            let container = document.getElementById("cartList");
+            if (!container) return;
+            
+            container.innerHTML = "";
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; padding: 40px;">
+                        <i class="fas fa-shopping-basket" style="font-size: 48px; color: rgba(255,255,255,0.2);"></i>
+                        <div class="empty-cart-msg" style="padding: 0;">Your secure cart is currently empty.</div>
+                        <a href="index.html"><button class="action-btn" style="width: auto;">Browse Terminal</button></a>
+                    </div>`;
+                return;
+            }
+            
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += item.price;
+                container.innerHTML += `<div class="card" style="flex-direction: row; align-items: center; padding: 12px 20px;">
+                    <h3 style="margin:0; font-size: 15px;">${item.name}</h3>
+                    <p style="margin:0; color: #38bdf8;">₹${item.price.toFixed(2)}</p>
+                </div>`;
+            });
+
+            // THE MASTERMIND TAX CALCULATION
+            let gst = subtotal * 0.05;
+            let grandTotal = subtotal + gst;
+
+            container.innerHTML += `
+            <div class="card cart-total-card" style="display: block; margin-top: 20px; border-top: 2px dashed rgba(255,255,255,0.2);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="color: #cbd5e1; font-size: 14px;">Subtotal</span>
+                    <span style="color: white; font-size: 14px;">₹${subtotal.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="color: #cbd5e1; font-size: 14px;">Estimated GST (5%)</span>
+                    <span style="color: #f43f5e; font-size: 14px;">+ ₹${gst.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+                    <h3 style="margin:0; color: white;">Grand Total</h3>
+                    <h3 style="margin:0; color: #38bdf8; font-size: 22px;">₹${grandTotal.toFixed(2)}</h3>
+                </div>
+            </div>`;
+        }
+        
+        window.onload = () => {
+            renderCartPage();
+        };
+    </script>
+</body>
+</html>

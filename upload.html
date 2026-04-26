@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload - FastPharma API</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        /* Specific CSS just for the beautiful upload zone */
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .upload-zone:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .upload-btn {
+            flex: 1;
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid var(--primary);
+            color: white;
+            padding: 15px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn i {
+            font-size: 24px;
+        }
+
+        .upload-btn:hover, .upload-btn:active {
+            background: var(--primary);
+            transform: scale(0.96);
+        }
+
+        /* Image Preview Styling */
+        #imagePreview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none; /* Hidden until an image is selected */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-family: inherit;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo">FastPharma</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="upload.html" class="nav-item active">Upload</a>
+            <a href="cart.html" class="nav-item">Cart</a>
+            <a href="profile.html" class="nav-item">Profile</a>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 700px; margin-top: 40px;">
+        
+        <div class="card" style="display: block;">
+            <h2 style="margin-top: 0; color: white;">Secure Prescription Vault</h2>
+            <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px;">Please ensure the doctor's handwriting and signature are clearly visible.</p>
+
+            <div class="upload-zone">
+                <i class="fas fa-file-medical" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+                <h3 style="margin: 0; color: white;">Select Document Source</h3>
+                
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;" onchange="previewFile(this)">
+                <input type="file" id="galleryInput" accept="image/*" style="display: none;" onchange="previewFile(this)">
+
+                <div class="upload-buttons">
+                    <button class="upload-btn" onclick="document.getElementById('cameraInput').click()">
+                        <i class="fas fa-camera"></i>
+                        Open Camera
+                    </button>
+                    
+                    <button class="upload-btn" onclick="document.getElementById('galleryInput').click()">
+                        <i class="fas fa-images"></i>
+                        Open Gallery
+                    </button>
+                </div>
+
+                <img id="imagePreview" alt="Prescription Preview">
+            </div>
+
+            <textarea id="msg" placeholder="Any special instructions? (e.g., 'Please deliver before 8 PM')" rows="3"></textarea>
+            
+            <button class="magic-btn" onclick="triggerWhatsApp()" style="width: 100%; max-width: 100%; margin-bottom: 0;">
+                <i class="fab fa-whatsapp" style="font-size: 20px;"></i> Transmit to Shopkeeper
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function previewFile(input) {
+            const preview = document.getElementById('imagePreview');
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                // Convert image file to base64 string and show it
+                preview.src = reader.result;
+                preview.style.display = "block";
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
