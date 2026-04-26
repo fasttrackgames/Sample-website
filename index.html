@@ -3,75 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - FastPharma API</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Adrit Pharmacy | Digital Terminal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #0EA5E9;
+            --bg-color: #F8FAFC;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-main: #1E293B;
+            --border: #E2E8F0;
+            --glass: blur(12px);
+        }
+
+        body.dark-mode {
+            --bg-color: #0F172A;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #F1F5F9;
+            --border: #334155;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        /* HERO */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #0ea5e910 0%, #2563eb10 100%);
+        }
+
+        .magic-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        /* GRID */
+        .main-dashboard { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass);
+            padding: 2rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* THEME TOGGLE */
+        .theme-toggle-box {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #cart-panel {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.5);
+        }
+    </style>
 </head>
 <body>
 
-   <nav class="navbar">
-        <div class="nav-logo">FastPharma</div>
-        <div class="nav-links">
-            <a href="index.html" class="nav-item active">Home</a>
-            <a href="upload.html" class="nav-item">Upload</a>
-            <a href="cart.html" class="nav-item">Cart</a>
-            <a href="profile.html" class="nav-item">Profile</a>
-            
-            <button class="theme-toggle-box" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+    <nav class="navbar">
+        <div class="nav-logo">Adrit Pharmacy</div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="theme-toggle-box" onclick="toggleTheme()">
                 <i id="themeIcon" class="fas fa-moon"></i>
             </button>
         </div>
     </nav>
 
-    <div class="hero-section">
-        <h1>FastPharma Delivery</h1>
-        <p>Secure, instant medication delivery across Banibon Bazar. Upload your prescription or browse our instant terminal.</p>
-        
-        <button class="magic-btn" onclick="triggerWhatsApp()">
-            <i class="fab fa-whatsapp" style="font-size: 24px;"></i>
-            Upload Prescription Now
+    <div class="hero">
+        <h1>Adrit Digital Terminal</h1>
+        <p>Direct Pharmacy Pipeline | Banibon Bazar</p>
+        <button class="magic-btn" onclick="uploadPrescription()">
+            <i class="fab fa-whatsapp"></i> Upload Prescription
         </button>
-    </div>
     </div>
 
     <div class="main-dashboard">
-        <h2 style="color: #64748b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px;">Instant Order Terminal</h2>
-
+        <h2 style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;">Instant Order Terminal</h2>
         <div class="product-grid">
             <div class="card">
-                <div>
-                    <h3>Paracetamol 500mg</h3>
-                    <p>₹20.00</p>
-                </div>
+                <h3>Paracetamol 500mg</h3>
+                <p>₹20.00</p>
                 <button class="action-btn" onclick="addToCart('Paracetamol 500mg', 20)">Add to Cart</button>
             </div>
-
             <div class="card">
-                <div>
-                    <h3>Cough Syrup (100ml)</h3>
-                    <p>₹75.00</p>
-                </div>
+                <h3>Cough Syrup (100ml)</h3>
+                <p>₹75.00</p>
                 <button class="action-btn" onclick="addToCart('Cough Syrup', 75)">Add to Cart</button>
             </div>
-            
             <div class="card">
-                <div>
-                    <h3>Vitamin C + Zinc Tablets</h3>
-                    <p>₹45.00</p>
-                </div>
+                <h3>Vitamin C + Zinc</h3>
+                <p>₹45.00</p>
                 <button class="action-btn" onclick="addToCart('Vitamin C + Zinc', 45)">Add to Cart</button>
-            </div>
-
-            <div class="card">
-                <div>
-                    <h3>Antacid Gel (170ml)</h3>
-                    <p>₹110.00</p>
-                </div>
-                <button class="action-btn" onclick="addToCart('Antacid Gel', 110)">Add to Cart</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="cart-panel" onclick="checkout()">
+        Checkout (<span id="cart-count">0</span> items)
+    </div>
+
+    <script>
+        // === ARCHITECT CONFIGURATION ===
+        const SHOP_PHONE = "917003718537"; 
+        const SHOP_UPI = "adritpharmacy@okicici"; 
+
+        let cart = [];
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('themeIcon');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+
+        function uploadPrescription() {
+            const msg = encodeURIComponent("Namaskar Adrit Pharmacy, ami prescription upload korte chai.");
+            window.open(`https://wa.me/${SHOP_PHONE}?text=${msg}`);
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            document.getElementById('cart-panel').style.display = 'block';
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function checkout() {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            let itemsList = cart.map(i => i.name).join(", ");
+            
+            // 1. Trigger UPI Payment
+            const upiUrl = `upi://pay?pa=${SHOP_UPI}&pn=Adrit%20Pharmacy&am=${total}&cu=INR`;
+            window.location.href = upiUrl;
+
+            // 2. Open WhatsApp after short delay
+            setTimeout(() => {
+                const msg = encodeURIComponent(`*ORDER CONFIRMED*%0AItems: ${itemsList}%0ATotal: ₹${total}%0A_Payment Sent via UPI_`);
+                window.open(`https://wa.me/${SHOP_PHONE}?text=${msg}`);
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
